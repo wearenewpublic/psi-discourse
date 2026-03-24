@@ -7,14 +7,15 @@ import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import { i18n } from "discourse-i18n";
 import PsiDiscreteSlider from "./psi-discrete-slider";
 import PsiVoteResults from "./psi-vote-results";
-import { i18n } from "discourse-i18n";
 
 export default class PsiSliderWidget extends Component {
   @service currentUser;
   @service composer;
   @service router;
+
   @tracked selectedPosition = null;
   @tracked hasVoted = false;
   @tracked voteCounts = {};
@@ -36,16 +37,22 @@ export default class PsiSliderWidget extends Component {
   }
 
   get avatarUrl() {
-    if (!this.currentUser?.avatar_template) return null;
+    if (!this.currentUser?.avatar_template) {
+      return null;
+    }
     return this.currentUser.avatar_template.replace("{size}", "48");
   }
 
   get userResponse() {
-    if (!this.userVote?.post_id) return null;
+    if (!this.userVote?.post_id) {
+      return null;
+    }
     const post = this.topic?.postStream?.posts?.find(
       (p) => p.id === this.userVote.post_id
     );
-    if (!post) return null;
+    if (!post) {
+      return null;
+    }
     return {
       excerpt: post.cooked?.replace(/<[^>]*>/g, "").slice(0, 200),
       replyCount: post.reply_count || 0,
@@ -54,7 +61,9 @@ export default class PsiSliderWidget extends Component {
   }
 
   loadVoteData() {
-    if (!this.sliderEnabled || !this.topic) return;
+    if (!this.sliderEnabled || !this.topic) {
+      return;
+    }
 
     // Load from serialized topic data
     const topic = this.topic;
@@ -83,8 +92,12 @@ export default class PsiSliderWidget extends Component {
 
   @action
   async submitVoteOnly() {
-    if (this.requireLogin()) return;
-    if (!this.selectedPosition || this.submitting) return;
+    if (this.requireLogin()) {
+      return;
+    }
+    if (!this.selectedPosition || this.submitting) {
+      return;
+    }
     this.submitting = true;
 
     try {
@@ -109,8 +122,12 @@ export default class PsiSliderWidget extends Component {
 
   @action
   openComposer() {
-    if (this.requireLogin()) return;
-    if (!this.selectedPosition) return;
+    if (this.requireLogin()) {
+      return;
+    }
+    if (!this.selectedPosition) {
+      return;
+    }
 
     this.composer.open({
       action: "reply",
@@ -129,7 +146,12 @@ export default class PsiSliderWidget extends Component {
       )?.post_number;
 
       if (postNumber) {
-        this.router.transitionTo("topic.fromParamsNear", this.topic.slug, this.topic.id, postNumber);
+        this.router.transitionTo(
+          "topic.fromParamsNear",
+          this.topic.slug,
+          this.topic.id,
+          postNumber
+        );
       }
     } else {
       // Reset to slider mode to update vote-only

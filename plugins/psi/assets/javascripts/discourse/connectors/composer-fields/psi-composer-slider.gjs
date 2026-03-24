@@ -5,12 +5,9 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
-import { service } from "@ember/service";
 import PsiDiscreteSlider from "../../components/psi-discrete-slider";
 
 export default class PsiComposerSlider extends Component {
-  @service currentUser;
-
   @tracked localPosition = null;
 
   get model() {
@@ -19,7 +16,9 @@ export default class PsiComposerSlider extends Component {
 
   get isReplyToSliderTopic() {
     const model = this.model;
-    if (!model) return false;
+    if (!model) {
+      return false;
+    }
     return (
       model.replyingToTopic &&
       !model.replyToPostNumber &&

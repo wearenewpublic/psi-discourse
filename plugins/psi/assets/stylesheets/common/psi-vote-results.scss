@@ -1,6 +1,5 @@
 // PSI Vote Results Bar Chart Styles
 // Reference: Figma PSI Design System node 3348:10165
-
 .psi-vote-results {
   padding: 16px 0;
 
@@ -48,15 +47,19 @@
     &--1 {
       background-color: #d4c8f8;
     }
+
     &--2 {
       background-color: #b5a0f3;
     }
+
     &--3 {
       background-color: #9678ee;
     }
+
     &--4 {
       background-color: #7c3aed;
     }
+
     &--5 {
       background-color: var(--psi-purple);
     }

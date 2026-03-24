@@ -3,15 +3,12 @@
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import { service } from "@ember/service";
-import { htmlSafe } from "@ember/template";
-import { SLIDER_POSITIONS, POSITION_COUNT } from "../lib/psi-constants";
-import { i18n } from "discourse-i18n";
+import { trustHTML } from "@ember/template";
 import icon from "discourse/helpers/d-icon";
+import { i18n } from "discourse-i18n";
+import { POSITION_COUNT, SLIDER_POSITIONS } from "../lib/psi-constants";
 
 export default class PsiVoteResults extends Component {
-  @service currentUser;
-
   get totalVotes() {
     return this.args.total || 0;
   }
@@ -31,7 +28,7 @@ export default class PsiVoteResults extends Component {
         count,
         pct,
         label: SLIDER_POSITIONS[position],
-        barStyle: htmlSafe(`height: ${heightPct}%`),
+        barStyle: trustHTML(`height: ${heightPct}%`),
         barClass: `psi-vote-results__bar psi-vote-results__bar--${position}`,
       };
     });
@@ -39,9 +36,11 @@ export default class PsiVoteResults extends Component {
 
   get userMarkerStyle() {
     const pos = this.args.userVote?.position;
-    if (!pos) return null;
+    if (!pos) {
+      return null;
+    }
     const pct = ((pos - 1) / (POSITION_COUNT - 1)) * 100;
-    return htmlSafe(`left: ${pct}%`);
+    return trustHTML(`left: ${pct}%`);
   }
 
   get hasUserMarker() {
@@ -77,7 +76,7 @@ export default class PsiVoteResults extends Component {
       <div class="psi-vote-results__track">
         <div class="psi-vote-results__track-line">
           <div class="psi-vote-results__track-dots">
-            {{#each this.bars as |bar|}}
+            {{#each this.bars}}
               <span class="psi-vote-results__track-dot"></span>
             {{/each}}
           </div>

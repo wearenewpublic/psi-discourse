@@ -4,9 +4,9 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
-import { htmlSafe } from "@ember/template";
+import { trustHTML } from "@ember/template";
 import concatClass from "discourse/helpers/concat-class";
-import { SLIDER_POSITIONS, POSITION_COUNT } from "../lib/psi-constants";
+import { POSITION_COUNT, SLIDER_POSITIONS } from "../lib/psi-constants";
 
 export default class PsiDiscreteSlider extends Component {
   @tracked isDragging = false;
@@ -37,7 +37,7 @@ export default class PsiDiscreteSlider extends Component {
   }
 
   get thumbStyle() {
-    return htmlSafe(`left: ${this.thumbPositionPct}%`);
+    return trustHTML(`left: ${this.thumbPositionPct}%`);
   }
 
   get selectedLabel() {
@@ -84,9 +84,10 @@ export default class PsiDiscreteSlider extends Component {
     );
 
     const onMove = (e) => {
-      const clientX = e.clientX ?? e.touches?.[0]?.clientX;
-      if (clientX == null || !trackEl) return;
-      this.dragPct = this.clientXToPct(clientX, trackEl);
+      if (!trackEl) {
+        return;
+      }
+      this.dragPct = this.clientXToPct(e.clientX, trackEl);
     };
 
     const onUp = () => {
@@ -96,16 +97,14 @@ export default class PsiDiscreteSlider extends Component {
         this.dragPct = null;
         this.args.onSelect?.(position);
       }
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup", onUp);
-      document.removeEventListener("touchmove", onMove);
-      document.removeEventListener("touchend", onUp);
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+      document.removeEventListener("pointercancel", onUp);
     };
 
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onUp);
-    document.addEventListener("touchmove", onMove, { passive: true });
-    document.addEventListener("touchend", onUp);
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp);
+    document.addEventListener("pointercancel", onUp);
   }
 
   <template>
@@ -123,13 +122,15 @@ export default class PsiDiscreteSlider extends Component {
       >
         <div class="psi-discrete-slider__track">
           <div class="psi-discrete-slider__dots">
-            {{#each this.dots as |dot|}}
+            {{#each this.dots}}
               <span class="psi-discrete-slider__dot"></span>
             {{/each}}
           </div>
         </div>
 
+        {{! template-lint-disable no-pointer-down-event-binding }}
         <div
+          role="none"
           class={{concatClass
             "psi-discrete-slider__thumb"
             (if this.hasSelection "psi-discrete-slider__thumb--selected")
@@ -137,8 +138,7 @@ export default class PsiDiscreteSlider extends Component {
             (if this.showPulse "psi-discrete-slider__thumb--pulse")
           }}
           style={{this.thumbStyle}}
-          {{on "mousedown" this.handleThumbDown}}
-          {{on "touchstart" this.handleThumbDown}}
+          {{on "pointerdown" this.handleThumbDown}}
         >
           {{! Tooltip above thumb showing the snap position label }}
           {{#if this.selectedLabel}}

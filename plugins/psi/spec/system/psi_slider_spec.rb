@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # System tests for the PSI slider: visibility, voting flow, bar chart, one-reply enforcement, and stance badges.
-RSpec.describe "PSI Comment Slider", type: :system do
+RSpec.describe "PSI Comment Slider" do
   fab!(:admin)
   fab!(:user)
   fab!(:user_2, :user)
@@ -84,16 +84,9 @@ RSpec.describe "PSI Comment Slider", type: :system do
       PsiSliderVote.create!(topic: topic, user: user, position: 4, post: topic.posts.last)
 
       # Trying to create a second top-level reply should fail
-      post =
-        PostCreator.new(
-          user,
-          topic_id: topic.id,
-          raw: "My second response attempt",
-        ).create
+      post = PostCreator.new(user, topic_id: topic.id, raw: "My second response attempt").create
 
-      expect(post.errors[:base]).to include(
-        I18n.t("psi.errors.one_reply_per_user"),
-      )
+      expect(post.errors[:base]).to include(I18n.t("psi.errors.one_reply_per_user"))
     end
 
     it "allows nested replies" do

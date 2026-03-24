@@ -61,12 +61,13 @@ RSpec.describe PsiSliderVote do
 
     it "links to a post when provided" do
       post = Fabricate(:post, topic: topic, user: user)
-      vote = PsiSliderVote.upsert_vote!(
-        topic_id: topic.id,
-        user_id: user.id,
-        position: 3,
-        post_id: post.id,
-      )
+      vote =
+        PsiSliderVote.upsert_vote!(
+          topic_id: topic.id,
+          user_id: user.id,
+          position: 3,
+          post_id: post.id,
+        )
 
       expect(vote.post_id).to eq(post.id)
     end

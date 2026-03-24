@@ -10,7 +10,7 @@ RSpec.describe "Psi Slider Endpoints" do
     topic.save_custom_fields
     topic
   end
-  fab!(:non_slider_topic) { Fabricate(:topic) }
+  fab!(:non_slider_topic, :topic)
 
   describe "PUT /psi/vote" do
     it "requires login" do

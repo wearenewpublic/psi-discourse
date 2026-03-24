@@ -23,17 +23,17 @@ module Psi
         return render_json_error(I18n.t("psi.errors.invalid_position"), status: 422)
       end
 
-      vote = PsiSliderVote.upsert_vote!(
-        topic_id: topic.id,
-        user_id: current_user.id,
-        position: position,
-      )
+      vote =
+        PsiSliderVote.upsert_vote!(topic_id: topic.id, user_id: current_user.id, position: position)
 
       render json: {
-        vote: { position: vote.position, post_id: vote.post_id },
-        counts: PsiSliderVote.counts_for_topic(topic.id),
-        total: PsiSliderVote.where(topic_id: topic.id).count,
-      }
+               vote: {
+                 position: vote.position,
+                 post_id: vote.post_id,
+               },
+               counts: PsiSliderVote.counts_for_topic(topic.id),
+               total: PsiSliderVote.where(topic_id: topic.id).count,
+             }
     end
 
     def remove_vote
@@ -44,9 +44,9 @@ module Psi
       PsiSliderVote.where(topic_id: topic.id, user_id: current_user.id, post_id: nil).destroy_all
 
       render json: {
-        counts: PsiSliderVote.counts_for_topic(topic.id),
-        total: PsiSliderVote.where(topic_id: topic.id).count,
-      }
+               counts: PsiSliderVote.counts_for_topic(topic.id),
+               total: PsiSliderVote.where(topic_id: topic.id).count,
+             }
     end
 
     def votes

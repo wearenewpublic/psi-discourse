@@ -1,6 +1,5 @@
 // PSI Discrete Slider Component Styles
 // Reference: Figma PSI Design System — Slider states + transitions
-
 .psi-slider-widget {
   padding: 16px 0;
   margin-bottom: 8px;
@@ -62,11 +61,14 @@
     transform: translate(-50%, -50%);
     cursor: grab;
     z-index: 2;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgb(0, 0, 0, 0.1);
 
     // Smooth movement when snapping between positions
-    transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-      transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    transition:
+      left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
 
     &:hover {
       transform: translate(-50%, -50%) scale(1.1);
@@ -86,8 +88,11 @@
     &--dragging {
       cursor: grabbing;
       transform: translate(-50%, -50%) scale(0.9);
+
       // Disable left transition so thumb follows mouse/finger instantly
-      transition: transform 0.1s ease, background-color 0.2s ease,
+      transition:
+        transform 0.1s ease,
+        background-color 0.2s ease,
         border-color 0.2s ease !important;
     }
 
@@ -202,15 +207,17 @@
 // Pulse animation — pulsing purple glow shadow on the thumb
 @keyframes psi-thumb-glow {
   0% {
-    box-shadow: 0 0 0 0 rgba(90, 30, 245, 0.4);
+    box-shadow: 0 0 0 0 rgb(90, 30, 245, 0.4);
     border-color: var(--psi-gray-400);
   }
+
   50% {
-    box-shadow: 0 0 0 10px rgba(90, 30, 245, 0);
-    border-color: rgba(90, 30, 245, 0.6);
+    box-shadow: 0 0 0 10px rgb(90, 30, 245, 0);
+    border-color: rgb(90, 30, 245, 0.6);
   }
+
   100% {
-    box-shadow: 0 0 0 0 rgba(90, 30, 245, 0);
+    box-shadow: 0 0 0 0 rgb(90, 30, 245, 0);
     border-color: var(--psi-gray-400);
   }
 }

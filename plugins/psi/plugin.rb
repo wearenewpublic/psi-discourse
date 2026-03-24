@@ -113,15 +113,14 @@ after_initialize do
     next if self.id.present? # Editing existing post is fine
 
     existing =
-      Post.where(topic_id: self.topic_id, user_id: self.user_id).where(
-        reply_to_post_number: nil,
-      ).where.not(post_number: 1).exists?
+      Post
+        .where(topic_id: self.topic_id, user_id: self.user_id)
+        .where(reply_to_post_number: nil)
+        .where.not(post_number: 1)
+        .exists?
 
     if existing
-      self.errors.add(
-        :base,
-        I18n.t("psi.errors.one_reply_per_user"),
-      )
+      self.errors.add(:base, I18n.t("psi.errors.one_reply_per_user"))
       false
     else
       true

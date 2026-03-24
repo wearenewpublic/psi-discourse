@@ -2,7 +2,7 @@
 // Typography: IBM Plex Sans
 // Colors: Purple #5A1EF5, Salmon #FD6570
 
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap");
+@import "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap";
 
 // ---- CSS Custom Properties ----
 :root {
@@ -117,7 +117,6 @@ body {
 //
 //   Reply  React          ❤️ + 💬 🔥 100
 //   ─────────────────────────────────────
-
 .topic-post {
   // Remove default Discourse post borders/gaps
   .boxed {
@@ -150,6 +149,7 @@ body {
       // Show the display name prominently
       .first {
         font-weight: 600;
+
         a {
           color: var(--psi-dark);
         }
@@ -288,7 +288,7 @@ a {
   border-color: var(--psi-purple);
 
   &:hover {
-    background-color: darken(#5a1ef5, 10%);
+    background-color: #4a18cc;
   }
 }
 
@@ -315,7 +315,7 @@ body.composer-open::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgb(0, 0, 0, 0.4);
   z-index: 998;
 }
 
@@ -333,7 +333,7 @@ body.composer-open::before {
     max-height: 80vh !important;
     min-height: 500px;
     border-radius: 16px !important;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 20px 60px rgb(0, 0, 0, 0.3) !important;
     z-index: 999 !important;
     overflow-y: auto;
     background: white;
