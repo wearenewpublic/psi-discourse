@@ -42,6 +42,7 @@ after_initialize do
   Discourse::Application.routes.append { mount ::Psi::Engine, at: "/psi" }
 
   register_topic_custom_field_type("psi_slider_enabled", :boolean)
+  register_editable_topic_custom_field("psi_slider_enabled", staff_only: true)
   topic_view_post_custom_fields_allowlister { ["psi_slider_position"] }
 
   reloadable_patch do
