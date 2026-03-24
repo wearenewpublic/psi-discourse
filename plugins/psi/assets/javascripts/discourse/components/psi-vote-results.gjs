@@ -1,6 +1,8 @@
 import Component from "@glimmer/component";
+import { on } from "@ember/modifier";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
 import { SLIDER_POSITIONS, POSITION_COUNT } from "../lib/psi-constants";
 import { i18n } from "discourse-i18n";
 import icon from "discourse/helpers/d-icon";
@@ -15,23 +17,33 @@ export default class PsiVoteResults extends Component {
   get bars() {
     const counts = this.args.counts || {};
     const total = this.totalVotes;
+    const maxCount = Math.max(...Object.values(counts), 1);
 
     return Array.from({ length: POSITION_COUNT }, (_, i) => {
       const position = i + 1;
       const count = counts[position] || 0;
       const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-      return { position, count, pct, label: SLIDER_POSITIONS[position] };
+      const heightPct = maxCount > 0 ? Math.round((count / maxCount) * 100) : 0;
+      return {
+        position,
+        count,
+        pct,
+        label: SLIDER_POSITIONS[position],
+        barStyle: htmlSafe(`height: ${heightPct}%`),
+        barClass: `psi-vote-results__bar psi-vote-results__bar--${position}`,
+      };
     });
   }
 
-  get maxPct() {
-    return Math.max(...this.bars.map((b) => b.pct), 1);
-  }
-
-  get userMarkerPosition() {
+  get userMarkerStyle() {
     const pos = this.args.userVote?.position;
     if (!pos) return null;
-    return ((pos - 1) / (POSITION_COUNT - 1)) * 100;
+    const pct = ((pos - 1) / (POSITION_COUNT - 1)) * 100;
+    return htmlSafe(`left: ${pct}%`);
+  }
+
+  get hasUserMarker() {
+    return !!this.args.userVote?.position;
   }
 
   get responsesText() {
@@ -39,12 +51,9 @@ export default class PsiVoteResults extends Component {
     return i18n("psi.slider.responses", { count });
   }
 
-  get userPost() {
-    return this.args.userVote?.post_id;
-  }
-
   @action
-  handleUpdateClick() {
+  handleUpdateClick(event) {
+    event.preventDefault();
     this.args.onUpdate?.();
   }
 
@@ -58,10 +67,7 @@ export default class PsiVoteResults extends Component {
         {{#each this.bars as |bar|}}
           <div class="psi-vote-results__bar-group">
             <span class="psi-vote-results__bar-pct">{{bar.pct}}%</span>
-            <div
-              class="psi-vote-results__bar psi-vote-results__bar--{{bar.position}}"
-              style="height: {{if this.maxPct (mult (div bar.pct this.maxPct) 100) 0}}%"
-            ></div>
+            <div class={{bar.barClass}} style={{bar.barStyle}}></div>
           </div>
         {{/each}}
       </div>
@@ -75,17 +81,11 @@ export default class PsiVoteResults extends Component {
           </div>
         </div>
 
-        {{#if this.userMarkerPosition}}
+        {{#if this.hasUserMarker}}
           <div
             class="psi-vote-results__user-marker"
-            style="left: {{this.userMarkerPosition}}%"
+            style={{this.userMarkerStyle}}
           >
-            {{#if this.currentUser.avatar_template}}
-              <img
-                src={{this.currentUser.avatar_template}}
-                alt={{this.currentUser.username}}
-              />
-            {{/if}}
           </div>
         {{/if}}
       </div>
@@ -100,27 +100,22 @@ export default class PsiVoteResults extends Component {
         <div class="psi-vote-results__your-response">
           <div class="psi-vote-results__your-response-header">
             <span class="psi-vote-results__your-response-label">
-              {{i18n "psi.badge.your_response"}}
+              Your response
             </span>
           </div>
           <div class="psi-vote-results__your-response-excerpt">
             {{@userResponse.excerpt}}
           </div>
-          {{#if @userResponse.replyCount}}
-            <div class="psi-vote-results__your-response-stats">
-              {{@userResponse.replyCount}} replies · {{@userResponse.reactionCount}} reactions
-            </div>
-          {{/if}}
         </div>
       {{/if}}
 
       <a
-        href
+        href="#"
         class="psi-vote-results__update-link"
         {{on "click" this.handleUpdateClick}}
       >
         {{icon "pencil"}}
-        {{i18n "psi.slider.update_your_response"}}
+        Update your response
       </a>
     </div>
   </template>

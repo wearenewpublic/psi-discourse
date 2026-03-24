@@ -2,15 +2,26 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";
+import { htmlSafe } from "@ember/template";
+import concatClass from "discourse/helpers/concat-class";
 import { SLIDER_POSITIONS, POSITION_COUNT } from "../lib/psi-constants";
+
+function range(n) {
+  return Array.from({ length: n }, (_, i) => i);
+}
 
 export default class PsiDiscreteSlider extends Component {
   @tracked dragging = false;
-  @tracked hoverPosition = null;
+
+  dots = range(5);
 
   get thumbPosition() {
     const pos = this.args.selectedPosition || 3;
     return ((pos - 1) / (POSITION_COUNT - 1)) * 100;
+  }
+
+  get thumbStyle() {
+    return htmlSafe(`left: ${this.thumbPosition}%`);
   }
 
   get selectedLabel() {
@@ -22,18 +33,13 @@ export default class PsiDiscreteSlider extends Component {
     return !!this.args.selectedPosition;
   }
 
-  positionFromEvent(event) {
-    const track = event.currentTarget.closest(".psi-discrete-slider__track-container") ||
-      event.currentTarget;
-    const rect = track.getBoundingClientRect();
-    const x = (event.clientX || event.touches?.[0]?.clientX) - rect.left;
-    const pct = Math.max(0, Math.min(1, x / rect.width));
-    return Math.round(pct * (POSITION_COUNT - 1)) + 1;
-  }
-
   @action
   handleTrackClick(event) {
-    const position = this.positionFromEvent(event);
+    const track = event.currentTarget;
+    const rect = track.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const pct = Math.max(0, Math.min(1, x / rect.width));
+    const position = Math.round(pct * (POSITION_COUNT - 1)) + 1;
     this.args.onSelect?.(position);
   }
 
@@ -41,12 +47,11 @@ export default class PsiDiscreteSlider extends Component {
   handleMouseDown(event) {
     event.preventDefault();
     this.dragging = true;
+    const trackEl = event.currentTarget.parentElement;
 
     const onMove = (e) => {
-      if (!this.dragging) return;
-      const track = event.currentTarget.closest(".psi-discrete-slider__track-container");
-      if (!track) return;
-      const rect = track.getBoundingClientRect();
+      if (!this.dragging || !trackEl) return;
+      const rect = trackEl.getBoundingClientRect();
       const clientX = e.clientX || e.touches?.[0]?.clientX;
       const x = clientX - rect.left;
       const pct = Math.max(0, Math.min(1, x / rect.width));
@@ -83,16 +88,18 @@ export default class PsiDiscreteSlider extends Component {
       >
         <div class="psi-discrete-slider__track">
           <div class="psi-discrete-slider__dots">
-            {{#each (Array.from {length: 5})}}
+            {{#each this.dots as |dot|}}
               <span class="psi-discrete-slider__dot"></span>
             {{/each}}
           </div>
         </div>
 
         <div
-          class="psi-discrete-slider__thumb
-            {{if this.hasSelection 'psi-discrete-slider__thumb--selected'}}"
-          style="left: {{this.thumbPosition}}%"
+          class={{concatClass
+            "psi-discrete-slider__thumb"
+            (if this.hasSelection "psi-discrete-slider__thumb--selected")
+          }}
+          style={{this.thumbStyle}}
           {{on "mousedown" this.handleMouseDown}}
           {{on "touchstart" this.handleMouseDown}}
         >
