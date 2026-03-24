@@ -1,0 +1,3 @@
+[submodule "psi-demos"]
+	path = psi-demos
+	url = https://github.com/wearenewpublic/demos.git

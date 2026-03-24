@@ -1,0 +1,417 @@
+// PSI Theme — Core Styles
+// Typography: IBM Plex Sans
+// Colors: Purple #5A1EF5, Salmon #FD6570
+
+@import "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap";
+
+// ---- CSS Custom Properties ----
+:root {
+  --psi-purple: #5a1ef5;
+  --psi-purple-light: #ececff;
+  --psi-purple-tint: #f5f3ff;
+  --psi-salmon: #fd6570;
+  --psi-salmon-light: #fff0f1;
+  --psi-dark: #0d1118;
+  --psi-gray-100: #f7f7f7;
+  --psi-gray-200: #e9e9e9;
+  --psi-gray-300: #d9d9d9;
+  --psi-gray-400: #aeb6bc;
+  --psi-gray-500: #82919c;
+  --psi-gray-600: #65676b;
+
+  // Override Discourse theme variables
+  --font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --heading-font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --tertiary: var(--psi-purple);
+}
+
+// ---- Typography ----
+body {
+  font-family: var(--font-family);
+}
+
+// Topic title — large, medium weight like Figma
+#topic-title .fancy-title {
+  font-family: var(--heading-font-family);
+  font-weight: 500;
+  font-size: 1.75em;
+  line-height: 1.25;
+}
+
+// ======================================================
+// HIDE DISCOURSE UI NOT IN PSI FIGMA DESIGNS
+// ======================================================
+
+// Hide the left sidebar navigation
+.sidebar-wrapper,
+#d-sidebar,
+.sidebar-container {
+  display: none !important;
+}
+
+// Make body full-width without sidebar
+.has-sidebar-page #main-outlet-wrapper {
+  grid-template-columns: 1fr !important;
+}
+
+// Hide "this is the first time X has posted" small action posts
+.topic-post.small-action {
+  display: none !important;
+}
+
+// Hide "first time posted" notice banners inside posts
+.post-notice.new-user {
+  display: none !important;
+}
+
+// Hide the topic map / summary box
+.topic-map {
+  display: none !important;
+}
+
+// Hide timeline / progress bar on the right
+.topic-navigation .timeline-container,
+#topic-progress-wrapper {
+  display: none !important;
+}
+
+// Hide post number and date on the far right of posts
+.topic-post .post-info.post-date,
+.topic-post .post-info.topic-link {
+  display: none !important;
+}
+
+// Hide the "views" count, "copy link" etc. from post meta
+.post-info.likes,
+.post-info.reads {
+  display: none !important;
+}
+
+// Hide the topic footer buttons (Share, Bookmark, Reply at bottom)
+.topic-footer-buttons {
+  display: none !important;
+}
+
+// Hide the "New & Unread Topics" / suggested topics / "want to read more?" at the bottom
+#suggested-topics,
+.more-topics__container,
+.suggested-topics-message {
+  display: none !important;
+}
+
+// Hide the "Watching" notification level selector
+.topic-notifications-button {
+  display: none !important;
+}
+
+// ======================================================
+// POST STYLING — Match Figma layout
+// ======================================================
+//
+// Figma layout per post:
+//   [Avatar 40px]  Name (bold)
+//                  time ago
+//                  [Stance Badge]
+//
+//   Post body text
+//
+//   Reply  React          ❤️ + 💬 🔥 100
+//   ─────────────────────────────────────
+.topic-post {
+  // Remove default Discourse post borders/gaps
+  .boxed {
+    border-bottom: 1px solid var(--psi-gray-200);
+  }
+
+  // Post avatar — 40px round, on the left
+  .topic-avatar {
+    padding-right: 12px;
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  // ---- Author byline ----
+  // Figma: Name (bold) on first line, time below
+  .topic-meta-data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .names {
+      font-weight: 600;
+      font-size: 0.9375em;
+      color: var(--psi-dark);
+      order: 1;
+
+      // Show the display name prominently
+      .first {
+        font-weight: 600;
+
+        a {
+          color: var(--psi-dark);
+        }
+      }
+
+      // Hide the second (username) line if display name is shown
+      .second {
+        display: none;
+      }
+    }
+
+    // Move the relative date below the name
+    .post-infos {
+      order: 2;
+      margin-top: 2px;
+
+      .relative-date {
+        font-size: 0.8125em;
+        color: var(--psi-gray-500);
+      }
+    }
+  }
+
+  // ---- Post actions row ----
+  // Figma: Reply  React on the left, with text labels, reactions on right
+  .post-menu-area {
+    .post-controls {
+      .actions {
+        display: flex;
+        gap: 4px;
+        justify-content: flex-start;
+      }
+
+      // Show text labels on action buttons
+      .reply-to-tab,
+      .create {
+        .d-button-label {
+          display: inline !important;
+        }
+      }
+    }
+  }
+}
+
+// ---- Post meta-data layout (Figma: name bold, time below) ----
+.topic-post .topic-meta-data {
+  // Stack name and date vertically
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  .names {
+    width: 100%;
+    font-size: 1em;
+
+    // Display name — bold, dark, prominent (Figma style)
+    .first {
+      font-weight: 600;
+
+      a {
+        color: var(--psi-dark) !important;
+        font-weight: 600;
+        font-size: 1em;
+      }
+    }
+
+    // The full-name (second line) — show it but smaller
+    .second {
+      margin-left: 6px;
+      font-weight: 400;
+      font-size: 0.875em;
+      color: var(--psi-gray-500);
+
+      a {
+        color: var(--psi-gray-500) !important;
+      }
+    }
+  }
+
+  .post-infos {
+    width: 100%;
+    margin-top: 2px;
+
+    .relative-date {
+      font-size: 0.8125em;
+      color: var(--psi-gray-500);
+    }
+  }
+}
+
+// Stance badge positioning — below the names, full width
+.psi-stance-badge {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+// ---- PSI Stance Badge ----
+// Shown below the author name as a small pill
+.psi-stance-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.8125em;
+  font-weight: 500;
+  line-height: 1.25;
+  background-color: var(--psi-gray-100);
+  color: var(--psi-dark);
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+// ---- Editorial Badge / Group Flair ----
+.avatar-flair {
+  border-radius: 4px;
+  font-size: 0.75em;
+  font-weight: 500;
+  padding: 2px 8px;
+  min-width: auto;
+  line-height: 1.25;
+}
+
+// ---- Header Simplification ----
+.d-header {
+  box-shadow: none;
+  border-bottom: 1px solid var(--psi-gray-200);
+}
+
+// ---- Links ----
+a {
+  color: var(--psi-purple);
+}
+
+// ---- Buttons ----
+.btn-primary {
+  background-color: var(--psi-purple);
+  border-color: var(--psi-purple);
+
+  &:hover {
+    background-color: #4a18cc;
+  }
+}
+
+// ---- Sort Row (above posts) ----
+.topic-above-post-stream-outlet {
+  padding: 0 12px;
+}
+
+// ======================================================
+// COMPOSER STYLING — Centered modal matching Figma
+// ======================================================
+// Figma: Full composer view with slider above text area,
+// user byline, "Explain your response" label, clean text area,
+// "Post" button at bottom.
+//
+// We restyle Discourse's bottom-docked composer as a centered modal.
+
+// Backdrop overlay when composer is open
+#reply-control.open ~ .composer-popup-container,
+body.composer-open::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0, 0, 0, 0.4);
+  z-index: 998;
+}
+
+#reply-control {
+  &.open {
+    // Transform from bottom-docked to centered modal
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    bottom: auto !important;
+    width: 560px !important;
+    max-width: 90vw !important;
+    height: auto !important;
+    max-height: 80vh !important;
+    min-height: 500px;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgb(0, 0, 0, 0.3) !important;
+    z-index: 999 !important;
+    overflow-y: auto;
+    background: white;
+  }
+
+  // Clean up the composer header
+  .reply-details {
+    border-bottom: 1px solid var(--psi-gray-200);
+    padding: 12px 16px;
+  }
+
+  // Composer body
+  .composer-fields {
+    padding: 0 16px;
+  }
+
+  // Style the text area
+  .d-editor-input {
+    font-family: var(--font-family);
+    font-size: 1em;
+    border: 1px solid var(--psi-gray-300);
+    border-radius: 8px;
+    padding: 12px 16px;
+    min-height: 120px;
+
+    &::placeholder {
+      color: var(--psi-gray-400);
+    }
+  }
+
+  // Submit panel
+  .submit-panel {
+    padding: 12px 16px;
+    border-top: 1px solid var(--psi-gray-200);
+  }
+
+  // "Post" / "Reply" button — purple pill
+  .save-or-cancel .btn-primary {
+    background-color: var(--psi-purple);
+    border-color: var(--psi-purple);
+    border-radius: 24px;
+    padding: 10px 32px;
+    font-weight: 500;
+    width: 100%;
+  }
+
+  // PSI slider inside composer
+  .psi-composer-slider {
+    padding: 12px 0 16px;
+    border-bottom: 1px solid var(--psi-gray-200);
+    margin-bottom: 12px;
+
+    &__label {
+      font-weight: 500;
+      font-size: 0.9375em;
+      color: var(--psi-dark);
+      margin-bottom: 4px;
+    }
+  }
+
+  // Hide the preview panel — Figma doesn't have it
+  .d-editor-preview-wrapper,
+  .toggle-preview {
+    display: none !important;
+  }
+
+  // Hide the formatting toolbar — Figma has a clean text area
+  .d-editor-button-bar {
+    display: none !important;
+  }
+
+  // Hide the composer grippie (resize handle)
+  .grippie {
+    display: none !important;
+  }
+
+  // Hide the "more options" area
+  .composer-plugin-outlet-container {
+    display: none !important;
+  }
+}

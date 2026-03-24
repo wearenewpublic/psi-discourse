@@ -1,0 +1,223 @@
+// PSI Discrete Slider Component Styles
+// Reference: Figma PSI Design System — Slider states + transitions
+.psi-slider-widget {
+  padding: 16px 0;
+  margin-bottom: 8px;
+}
+
+// ---- Discrete Slider ----
+.psi-discrete-slider {
+  padding: 8px 0;
+
+  &__label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.875em;
+    color: var(--psi-gray-600);
+    margin-bottom: 16px;
+  }
+
+  &__track-container {
+    position: relative;
+    padding: 20px 0;
+    cursor: pointer;
+  }
+
+  &__track {
+    position: relative;
+    height: 6px;
+    background-color: var(--psi-gray-300);
+    border-radius: 3px;
+  }
+
+  &__dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--psi-gray-400);
+    flex-shrink: 0;
+  }
+
+  // ---- Thumb ----
+  &__thumb {
+    position: absolute;
+    top: 50%;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid var(--psi-gray-400);
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgb(0, 0, 0, 0.1);
+
+    // Smooth movement when snapping between positions
+    transition:
+      left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    // ---- Selected state: purple filled ----
+    &--selected {
+      background-color: var(--psi-purple);
+      border-color: var(--psi-purple);
+
+      &:hover {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+
+    // ---- Dragging state: slightly smaller, instant position follow ----
+    &--dragging {
+      cursor: grabbing;
+      transform: translate(-50%, -50%) scale(0.9);
+
+      // Disable left transition so thumb follows mouse/finger instantly
+      transition:
+        transform 0.1s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease !important;
+    }
+
+    // ---- Pulse animation when idle (no selection) ----
+    // PSI product style: pulsing purple shadow/glow on the thumb border
+    &--pulse {
+      animation: psi-thumb-glow 2s ease-in-out infinite;
+    }
+  }
+
+  // ---- Tooltip above thumb (shows snap position during drag) ----
+  &__tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--psi-dark);
+    color: white;
+    font-size: 0.75em;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+
+    // Arrow
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--psi-dark);
+    }
+  }
+
+  // "You" badge floating below the thumb
+  &__you-badge-float {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--psi-purple);
+    color: white;
+    font-size: 0.65em;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  // ---- Labels row ----
+  &__labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.8125em;
+    color: var(--psi-gray-600);
+  }
+
+  // (Selected label and You badge are now shown as tooltip/float on the thumb)
+
+  // ---- Action buttons after selection ----
+  &__actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__share-thoughts {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--psi-gray-300);
+    border-radius: 8px;
+    background: white;
+    color: var(--psi-gray-500);
+    font-size: 0.9375em;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-family);
+
+    &:hover {
+      border-color: var(--psi-gray-400);
+      background: var(--psi-gray-100);
+    }
+  }
+
+  &__skip-vote {
+    color: var(--psi-purple);
+    font-size: 0.875em;
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font-family);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Pulse animation — pulsing purple glow shadow on the thumb
+@keyframes psi-thumb-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgb(90, 30, 245, 0.4);
+    border-color: var(--psi-gray-400);
+  }
+
+  50% {
+    box-shadow: 0 0 0 10px rgb(90, 30, 245, 0);
+    border-color: rgb(90, 30, 245, 0.6);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(90, 30, 245, 0);
+    border-color: var(--psi-gray-400);
+  }
+}

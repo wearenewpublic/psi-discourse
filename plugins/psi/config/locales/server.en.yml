@@ -1,0 +1,9 @@
+en:
+  site_settings:
+    psi_enabled: "Enable the PSI plugin (comment slider, theming, editorial tools)"
+    psi_topic_creation_allowed_groups: "Groups allowed to create new topics"
+  psi:
+    errors:
+      one_reply_per_user: "You have already responded to this conversation. Edit your existing response to update it."
+      invalid_position: "Slider position must be between 1 and 5."
+      not_slider_topic: "This topic does not have the comment slider enabled."

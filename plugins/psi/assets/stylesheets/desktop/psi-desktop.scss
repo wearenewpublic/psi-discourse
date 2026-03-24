@@ -1,0 +1,11 @@
+// PSI Desktop Overrides
+
+// Center content with max-width on desktop
+.psi-slider-widget {
+  max-width: 700px;
+}
+
+// Wider bars on desktop
+.psi-vote-results__bar {
+  width: 32px;
+}
