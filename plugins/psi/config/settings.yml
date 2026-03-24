@@ -1,0 +1,8 @@
+psi:
+  psi_enabled:
+    default: true
+    client: true
+  psi_topic_creation_allowed_groups:
+    default: "1|3"
+    type: group_list
+    client: true

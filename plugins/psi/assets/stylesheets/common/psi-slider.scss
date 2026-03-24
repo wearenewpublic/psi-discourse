@@ -1,0 +1,194 @@
+// PSI Discrete Slider Component Styles
+
+.psi-slider-widget {
+  padding: 16px 0;
+  margin-bottom: 8px;
+}
+
+// ---- Discrete Slider ----
+.psi-discrete-slider {
+  padding: 8px 0;
+
+  &__label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.875em;
+    color: var(--psi-gray-600);
+    margin-bottom: 12px;
+  }
+
+  &__track-container {
+    position: relative;
+    padding: 16px 0;
+  }
+
+  &__track {
+    position: relative;
+    height: 6px;
+    background-color: var(--psi-gray-300);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  &__dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--psi-gray-400);
+    flex-shrink: 0;
+  }
+
+  &__thumb {
+    position: absolute;
+    top: 50%;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid var(--psi-gray-400);
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 0.3s ease, border-color 0.3s ease;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    // Pulse animation ring
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: rgba(90, 30, 245, 0.15);
+      transform: translate(-50%, -50%) scale(1);
+      animation: psi-pulse 2s ease-in-out infinite;
+    }
+
+    &:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    &:active {
+      transform: translate(-50%, -50%) scale(0.9);
+      cursor: grabbing;
+    }
+
+    &--selected {
+      background-color: var(--psi-purple);
+      border-color: var(--psi-purple);
+
+      &::before {
+        animation: none;
+      }
+    }
+
+    &--has-avatar {
+      overflow: hidden;
+      border-color: var(--psi-purple);
+      padding: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &__labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.8125em;
+    color: var(--psi-gray-600);
+  }
+
+  &__selected-label {
+    text-align: center;
+    margin-top: 4px;
+    font-size: 0.875em;
+    font-weight: 500;
+    color: var(--psi-purple);
+  }
+
+  &__you-badge {
+    display: inline-block;
+    background-color: var(--psi-purple);
+    color: white;
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 4px;
+  }
+
+  &__actions {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__share-thoughts {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--psi-gray-300);
+    border-radius: 8px;
+    background: white;
+    color: var(--psi-gray-500);
+    font-size: 0.9375em;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:hover {
+      border-color: var(--psi-gray-400);
+    }
+  }
+
+  &__skip-vote {
+    color: var(--psi-purple);
+    font-size: 0.875em;
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes psi-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}

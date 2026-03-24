@@ -1,0 +1,24 @@
+en:
+  js:
+    psi:
+      slider:
+        slide_to_respond: "Slide to respond:"
+        skip_and_submit_vote: "Skip and submit vote"
+        share_your_thoughts: "Share your thoughts..."
+        update_your_response: "Update your response"
+        explain_your_response: "Explain your response"
+        responses:
+          one: "%{count} response"
+          other: "%{count} responses"
+        positions:
+          "1": "Strongly no"
+          "2": "No with reservations"
+          "3": "It's complicated"
+          "4": "Yes with reservations"
+          "5": "Strongly yes"
+      composer:
+        enable_slider: "Enable comment slider"
+        slider_label: "Your position:"
+      badge:
+        your_response: "Your response"
+        you: "You"

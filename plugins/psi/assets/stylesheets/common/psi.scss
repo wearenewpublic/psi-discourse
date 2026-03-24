@@ -1,0 +1,136 @@
+// PSI Theme — Core Styles
+// Typography: IBM Plex Sans
+// Colors: Purple #5A1EF5, Salmon #FD6570
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap");
+
+// ---- CSS Custom Properties ----
+:root {
+  --psi-purple: #5a1ef5;
+  --psi-purple-light: #ececff;
+  --psi-purple-tint: #f5f3ff;
+  --psi-salmon: #fd6570;
+  --psi-salmon-light: #fff0f1;
+  --psi-dark: #0d1118;
+  --psi-gray-100: #f7f7f7;
+  --psi-gray-200: #e9e9e9;
+  --psi-gray-300: #d9d9d9;
+  --psi-gray-400: #aeb6bc;
+  --psi-gray-500: #82919c;
+  --psi-gray-600: #65676b;
+
+  // Override Discourse theme variables
+  --font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --heading-font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --tertiary: var(--psi-purple);
+}
+
+// ---- Typography ----
+body {
+  font-family: var(--font-family);
+}
+
+// Topic title
+#topic-title .fancy-title {
+  font-family: var(--heading-font-family);
+  font-weight: 500;
+  font-size: 1.75em;
+  line-height: 1.25;
+}
+
+// ---- Topic Page Layout ----
+.topic-body {
+  .contents {
+    border-bottom: 1px solid var(--psi-gray-200);
+    padding-bottom: 0.75em;
+  }
+}
+
+// ---- Post Styling ----
+.topic-post {
+  .boxed {
+    border-bottom: 1px solid var(--psi-gray-200);
+  }
+
+  // Author info
+  .topic-meta-data {
+    .names {
+      font-weight: 500;
+    }
+  }
+}
+
+// ---- PSI Stance Badge ----
+.psi-stance-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.8125em;
+  font-weight: 500;
+  line-height: 1.25;
+  background-color: var(--psi-gray-100);
+  color: var(--psi-dark);
+  margin-top: 4px;
+}
+
+// ---- Editorial Badge / Group Flair ----
+.avatar-flair {
+  border-radius: 4px;
+  font-size: 0.75em;
+  font-weight: 500;
+  padding: 2px 8px;
+  min-width: auto;
+  line-height: 1.25;
+}
+
+// ---- Banner ----
+.psi-banner {
+  background-color: var(--psi-salmon-light);
+  border-bottom: 1px solid var(--psi-salmon);
+  padding: 10px 16px;
+  font-size: 0.875em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__text {
+    color: var(--psi-dark);
+
+    a {
+      color: var(--psi-dark);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  }
+
+  &__dismiss {
+    cursor: pointer;
+    color: var(--psi-gray-500);
+    background: none;
+    border: none;
+    font-size: 1em;
+    padding: 0 4px;
+  }
+}
+
+// ---- Header Simplification ----
+// Make the Discourse header cleaner for PSI
+.d-header {
+  box-shadow: none;
+  border-bottom: 1px solid var(--psi-gray-200);
+}
+
+// ---- Links ----
+a {
+  color: var(--psi-purple);
+}
+
+// ---- Buttons ----
+.btn-primary {
+  background-color: var(--psi-purple);
+  border-color: var(--psi-purple);
+
+  &:hover {
+    background-color: darken(#5a1ef5, 10%);
+  }
+}
