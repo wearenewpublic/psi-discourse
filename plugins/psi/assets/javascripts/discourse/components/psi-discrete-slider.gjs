@@ -1,3 +1,5 @@
+// Draggable 5-position discrete slider for selecting an opinion stance.
+// Supports mouse and touch gestures, snaps to positions, and pulses when idle.
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";
@@ -137,7 +139,15 @@ export default class PsiDiscreteSlider extends Component {
           style={{this.thumbStyle}}
           {{on "mousedown" this.handleThumbDown}}
           {{on "touchstart" this.handleThumbDown}}
-        ></div>
+        >
+          {{! Tooltip above thumb showing the snap position label }}
+          {{#if this.selectedLabel}}
+            <div class="psi-discrete-slider__tooltip">
+              {{this.selectedLabel}}
+            </div>
+            <div class="psi-discrete-slider__you-badge-float">You</div>
+          {{/if}}
+        </div>
       </div>
 
       <div class="psi-discrete-slider__labels">
@@ -145,15 +155,6 @@ export default class PsiDiscreteSlider extends Component {
         <span>It's complicated</span>
         <span>Strongly yes</span>
       </div>
-
-      {{#if this.selectedLabel}}
-        <div class="psi-discrete-slider__selected-label">
-          {{this.selectedLabel}}
-        </div>
-        <div style="text-align: center;">
-          <span class="psi-discrete-slider__you-badge">You</span>
-        </div>
-      {{/if}}
     </div>
   </template>
 }

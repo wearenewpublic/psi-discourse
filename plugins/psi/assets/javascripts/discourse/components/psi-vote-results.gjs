@@ -1,3 +1,5 @@
+// Displays vote results as a bar chart with percentages, user position marker,
+// optional response excerpt, and an "Update your response" link.
 import Component from "@glimmer/component";
 import { on } from "@ember/modifier";
 import { action } from "@ember/object";

@@ -1,3 +1,5 @@
+// Main slider widget shown above topic posts. Orchestrates the voting flow:
+// displays the slider for new votes, submits via AJAX, then shows vote results.
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";

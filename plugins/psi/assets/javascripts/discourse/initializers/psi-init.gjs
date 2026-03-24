@@ -1,3 +1,5 @@
+// Plugin initializer: registers slider field serialization for post/topic creation
+// and renders the stance badge inline after poster names.
 import Component from "@glimmer/component";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { SLIDER_POSITIONS } from "../lib/psi-constants";

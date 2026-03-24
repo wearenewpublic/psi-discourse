@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Unit tests for PsiSliderVote: validations, vote counting, upsert, and label mapping.
 RSpec.describe PsiSliderVote do
   fab!(:user)
   fab!(:topic)

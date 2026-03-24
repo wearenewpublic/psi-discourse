@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Request specs for the PSI slider API: vote creation, removal, retrieval, and error handling.
 RSpec.describe "Psi Slider Endpoints" do
   fab!(:admin)
   fab!(:user)

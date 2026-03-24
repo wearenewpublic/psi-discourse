@@ -98,6 +98,50 @@
     }
   }
 
+  // ---- Tooltip above thumb (shows snap position during drag) ----
+  &__tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--psi-dark);
+    color: white;
+    font-size: 0.75em;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+
+    // Arrow
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--psi-dark);
+    }
+  }
+
+  // "You" badge floating below the thumb
+  &__you-badge-float {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--psi-purple);
+    color: white;
+    font-size: 0.65em;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
   // ---- Labels row ----
   &__labels {
     display: flex;
@@ -107,25 +151,7 @@
     color: var(--psi-gray-600);
   }
 
-  // ---- Selected position label ----
-  &__selected-label {
-    text-align: center;
-    margin-top: 8px;
-    font-size: 0.9375em;
-    font-weight: 500;
-    color: var(--psi-purple);
-  }
-
-  &__you-badge {
-    display: inline-block;
-    background-color: var(--psi-purple);
-    color: white;
-    font-size: 0.75em;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-top: 4px;
-  }
+  // (Selected label and You badge are now shown as tooltip/float on the thumb)
 
   // ---- Action buttons after selection ----
   &__actions {

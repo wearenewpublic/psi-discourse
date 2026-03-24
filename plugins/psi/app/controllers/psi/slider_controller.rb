@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# API controller for slider vote operations: cast, remove, and retrieve votes.
+# Mounted at /psi via Psi::Engine.
 module Psi
   class SliderController < ::ApplicationController
     requires_plugin Psi::PLUGIN_NAME

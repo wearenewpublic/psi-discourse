@@ -1,3 +1,4 @@
+// Composer connector: shows a checkbox to enable the comment slider when creating a new topic (staff only).
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { on } from "@ember/modifier";

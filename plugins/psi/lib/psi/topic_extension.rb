@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Extends Topic with has_many :psi_slider_votes and the psi_slider_enabled? helper.
 module Psi
   module TopicExtension
     extend ActiveSupport::Concern

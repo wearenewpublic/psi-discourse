@@ -1,3 +1,4 @@
+// Shared constants for the PSI slider: position labels (1-5) and total count.
 export const SLIDER_POSITIONS = {
   1: "Strongly no",
   2: "No with reservations",

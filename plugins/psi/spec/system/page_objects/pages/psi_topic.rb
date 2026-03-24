@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Page object for PSI slider system tests: helpers for visiting topics,
+# interacting with the slider, and asserting on vote results and badges.
 module PageObjects
   module Pages
     class PsiTopic < PageObjects::Pages::Base

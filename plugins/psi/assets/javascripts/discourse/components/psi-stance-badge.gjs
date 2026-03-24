@@ -1,3 +1,4 @@
+// Displays a small badge showing a user's slider stance label next to their post.
 import Component from "@glimmer/component";
 import { SLIDER_POSITIONS } from "../lib/psi-constants";
 

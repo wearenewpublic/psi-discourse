@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Creates the psi_slider_votes table with unique (topic, user) constraint
+# and a composite index on (topic, position) for efficient vote counting.
 class CreatePsiSliderVotes < ActiveRecord::Migration[7.0]
   def change
     create_table :psi_slider_votes do |t|

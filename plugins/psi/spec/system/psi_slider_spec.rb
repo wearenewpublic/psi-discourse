@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# System tests for the PSI slider: visibility, voting flow, bar chart, one-reply enforcement, and stance badges.
 RSpec.describe "PSI Comment Slider", type: :system do
   fab!(:admin)
   fab!(:user)

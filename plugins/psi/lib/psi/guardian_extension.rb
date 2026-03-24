@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Extends Guardian with PSI-specific permission checks (e.g., can_create_psi_topic?).
 module Psi
   module GuardianExtension
     extend ActiveSupport::Concern

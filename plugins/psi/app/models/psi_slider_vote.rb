@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Stores a user's slider vote (position 1-5) on a topic, optionally linked to a post.
+# One vote per user per topic; provides aggregation helpers for vote distribution.
 class PsiSliderVote < ActiveRecord::Base
   belongs_to :topic
   belongs_to :user
