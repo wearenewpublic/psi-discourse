@@ -116,9 +116,14 @@ The site will be available at **http://localhost:4200** (proxied through ember-c
 ## Step 7: Enable and configure PSI
 
 1. Go to **Admin > Settings** (http://localhost:4200/admin/site_settings)
-2. Search for "psi"
-3. Ensure **psi_enabled** is checked (should be on by default)
-4. Optionally configure **psi_topic_creation_allowed_groups**
+2. Search for "psi" — ensure **psi_enabled** is checked (should be on by default)
+3. Optionally configure **psi_topic_creation_allowed_groups**
+4. Also configure these Discourse settings for PSI-style display:
+   - Search for "enable names" → set to **true**
+   - Search for "display name on posts" → set to **true**
+   - Search for "prioritize username in ux" → set to **false**
+
+   These ensure poster names show as "Francesca Mao" instead of "francesca".
 
 ## Step 8: Set up editorial badging
 

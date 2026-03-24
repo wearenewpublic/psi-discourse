@@ -197,16 +197,35 @@ body {
 // ---- Post meta-data layout (Figma: name bold, time below) ----
 .topic-post .topic-meta-data {
   // Stack name and date vertically
+  display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
 
   .names {
     width: 100%;
-    font-weight: 600;
-    font-size: 0.9375em;
+    font-size: 1em;
 
-    .first a {
-      color: var(--psi-dark);
+    // Display name — bold, dark, prominent (Figma style)
+    .first {
       font-weight: 600;
+
+      a {
+        color: var(--psi-dark) !important;
+        font-weight: 600;
+        font-size: 1em;
+      }
+    }
+
+    // The full-name (second line) — show it but smaller
+    .second {
+      margin-left: 6px;
+      font-weight: 400;
+      font-size: 0.875em;
+      color: var(--psi-gray-500);
+
+      a {
+        color: var(--psi-gray-500) !important;
+      }
     }
   }
 
@@ -219,6 +238,12 @@ body {
       color: var(--psi-gray-500);
     }
   }
+}
+
+// Stance badge positioning — below the names, full width
+.psi-stance-badge {
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 
 // ---- PSI Stance Badge ----
