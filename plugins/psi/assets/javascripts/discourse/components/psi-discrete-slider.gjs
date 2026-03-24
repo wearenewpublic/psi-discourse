@@ -6,61 +6,94 @@ import { htmlSafe } from "@ember/template";
 import concatClass from "discourse/helpers/concat-class";
 import { SLIDER_POSITIONS, POSITION_COUNT } from "../lib/psi-constants";
 
-function range(n) {
-  return Array.from({ length: n }, (_, i) => i);
-}
-
 export default class PsiDiscreteSlider extends Component {
-  @tracked dragging = false;
+  @tracked isDragging = false;
+  @tracked dragPct = null; // Raw percentage 0-100 during drag
 
-  dots = range(5);
+  dots = [0, 1, 2, 3, 4];
 
-  get thumbPosition() {
-    const pos = this.args.selectedPosition || 3;
-    return ((pos - 1) / (POSITION_COUNT - 1)) * 100;
+  get selectedPosition() {
+    return this.args.selectedPosition ?? null;
+  }
+
+  // During drag, show the nearest snap position for the label
+  get activePosition() {
+    if (this.dragPct !== null) {
+      return this.pctToPosition(this.dragPct);
+    }
+    return this.selectedPosition;
+  }
+
+  get thumbPositionPct() {
+    if (this.isDragging && this.dragPct !== null) {
+      return this.dragPct; // Smooth — raw percentage
+    }
+    if (this.selectedPosition !== null) {
+      return ((this.selectedPosition - 1) / (POSITION_COUNT - 1)) * 100;
+    }
+    return 50; // Default center
   }
 
   get thumbStyle() {
-    return htmlSafe(`left: ${this.thumbPosition}%`);
+    return htmlSafe(`left: ${this.thumbPositionPct}%`);
   }
 
   get selectedLabel() {
-    const pos = this.args.selectedPosition;
+    const pos = this.activePosition;
     return pos ? SLIDER_POSITIONS[pos] : null;
   }
 
   get hasSelection() {
-    return !!this.args.selectedPosition;
+    return this.selectedPosition !== null || this.dragPct !== null;
+  }
+
+  get showPulse() {
+    return !this.hasSelection && !this.isDragging;
+  }
+
+  pctToPosition(pct) {
+    const raw = (pct / 100) * (POSITION_COUNT - 1) + 1;
+    return Math.max(1, Math.min(5, Math.round(raw)));
+  }
+
+  clientXToPct(clientX, trackEl) {
+    const rect = trackEl.getBoundingClientRect();
+    const x = clientX - rect.left;
+    return Math.max(0, Math.min(100, (x / rect.width) * 100));
   }
 
   @action
   handleTrackClick(event) {
-    const track = event.currentTarget;
-    const rect = track.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const pct = Math.max(0, Math.min(1, x / rect.width));
-    const position = Math.round(pct * (POSITION_COUNT - 1)) + 1;
+    const trackEl = event.currentTarget;
+    const pct = this.clientXToPct(event.clientX, trackEl);
+    const position = this.pctToPosition(pct);
+    this.dragPct = null;
     this.args.onSelect?.(position);
   }
 
   @action
-  handleMouseDown(event) {
+  handleThumbDown(event) {
     event.preventDefault();
-    this.dragging = true;
-    const trackEl = event.currentTarget.parentElement;
+    event.stopPropagation();
+    this.isDragging = true;
+
+    const trackEl = event.currentTarget.closest(
+      ".psi-discrete-slider__track-container"
+    );
 
     const onMove = (e) => {
-      if (!this.dragging || !trackEl) return;
-      const rect = trackEl.getBoundingClientRect();
-      const clientX = e.clientX || e.touches?.[0]?.clientX;
-      const x = clientX - rect.left;
-      const pct = Math.max(0, Math.min(1, x / rect.width));
-      const pos = Math.round(pct * (POSITION_COUNT - 1)) + 1;
-      this.args.onSelect?.(pos);
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+      if (clientX == null || !trackEl) return;
+      this.dragPct = this.clientXToPct(clientX, trackEl);
     };
 
     const onUp = () => {
-      this.dragging = false;
+      this.isDragging = false;
+      if (this.dragPct !== null) {
+        const position = this.pctToPosition(this.dragPct);
+        this.dragPct = null;
+        this.args.onSelect?.(position);
+      }
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onUp);
       document.removeEventListener("touchmove", onMove);
@@ -69,7 +102,7 @@ export default class PsiDiscreteSlider extends Component {
 
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onUp);
-    document.addEventListener("touchmove", onMove);
+    document.addEventListener("touchmove", onMove, { passive: true });
     document.addEventListener("touchend", onUp);
   }
 
@@ -82,7 +115,7 @@ export default class PsiDiscreteSlider extends Component {
         role="slider"
         aria-valuemin="1"
         aria-valuemax="5"
-        aria-valuenow={{@selectedPosition}}
+        aria-valuenow={{this.activePosition}}
         aria-label="Opinion slider"
         {{on "click" this.handleTrackClick}}
       >
@@ -98,15 +131,13 @@ export default class PsiDiscreteSlider extends Component {
           class={{concatClass
             "psi-discrete-slider__thumb"
             (if this.hasSelection "psi-discrete-slider__thumb--selected")
+            (if this.isDragging "psi-discrete-slider__thumb--dragging")
+            (if this.showPulse "psi-discrete-slider__thumb--pulse")
           }}
           style={{this.thumbStyle}}
-          {{on "mousedown" this.handleMouseDown}}
-          {{on "touchstart" this.handleMouseDown}}
-        >
-          {{#if @avatarUrl}}
-            <img src={{@avatarUrl}} alt="Your avatar" />
-          {{/if}}
-        </div>
+          {{on "mousedown" this.handleThumbDown}}
+          {{on "touchstart" this.handleThumbDown}}
+        ></div>
       </div>
 
       <div class="psi-discrete-slider__labels">

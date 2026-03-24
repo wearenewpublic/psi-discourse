@@ -14,10 +14,10 @@ function initializePsi(api) {
   api.serializeOnUpdate("psi_slider_position", "psiSliderPosition");
   api.serializeOnCreate("psi_slider_enabled", "psiSliderEnabled");
 
-  // Render stance badge after poster name on posts
+  // Render stance badge after the poster name using the __after outlet
   api.renderInOutlet(
-    "post-meta-data-poster-name",
-    class PsiStanceBadgeOutlet extends Component {
+    "post-meta-data-poster-name__after",
+    class PsiStanceBadge extends Component {
       get position() {
         return this.args.outletArgs?.post?.psi_slider_position;
       }
@@ -33,12 +33,6 @@ function initializePsi(api) {
       </template>
     }
   );
-
-  // Add body class when PSI is enabled
-  api.registerValueTransformer("topic-list-class", ({ value }) => {
-    value.push("psi-enabled");
-    return value;
-  });
 }
 
 export default {

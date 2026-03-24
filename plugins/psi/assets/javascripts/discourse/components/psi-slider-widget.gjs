@@ -13,7 +13,6 @@ export default class PsiSliderWidget extends Component {
   @service currentUser;
   @service composer;
   @service router;
-
   @tracked selectedPosition = null;
   @tracked hasVoted = false;
   @tracked voteCounts = {};
@@ -72,8 +71,17 @@ export default class PsiSliderWidget extends Component {
     this.selectedPosition = position;
   }
 
+  requireLogin() {
+    if (!this.currentUser) {
+      this.router.transitionTo("login");
+      return true;
+    }
+    return false;
+  }
+
   @action
   async submitVoteOnly() {
+    if (this.requireLogin()) return;
     if (!this.selectedPosition || this.submitting) return;
     this.submitting = true;
 
@@ -99,6 +107,7 @@ export default class PsiSliderWidget extends Component {
 
   @action
   openComposer() {
+    if (this.requireLogin()) return;
     if (!this.selectedPosition) return;
 
     this.composer.open({

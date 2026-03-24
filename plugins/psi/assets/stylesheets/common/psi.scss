@@ -92,8 +92,10 @@ body {
   display: none !important;
 }
 
-// Hide the "New & Unread Topics" / suggested topics at the bottom
-#suggested-topics {
+// Hide the "New & Unread Topics" / suggested topics / "want to read more?" at the bottom
+#suggested-topics,
+.more-topics__container,
+.suggested-topics-message {
   display: none !important;
 }
 
@@ -172,11 +174,49 @@ body {
   }
 
   // ---- Post actions row ----
-  // Figma shows: Reply  React     [reactions on right]
+  // Figma: Reply  React on the left, with text labels, reactions on right
   .post-menu-area {
-    .actions {
-      display: flex;
-      gap: 8px;
+    .post-controls {
+      .actions {
+        display: flex;
+        gap: 4px;
+        justify-content: flex-start;
+      }
+
+      // Show text labels on action buttons
+      .reply-to-tab,
+      .create {
+        .d-button-label {
+          display: inline !important;
+        }
+      }
+    }
+  }
+}
+
+// ---- Post meta-data layout (Figma: name bold, time below) ----
+.topic-post .topic-meta-data {
+  // Stack name and date vertically
+  flex-wrap: wrap;
+
+  .names {
+    width: 100%;
+    font-weight: 600;
+    font-size: 0.9375em;
+
+    .first a {
+      color: var(--psi-dark);
+      font-weight: 600;
+    }
+  }
+
+  .post-infos {
+    width: 100%;
+    margin-top: 2px;
+
+    .relative-date {
+      font-size: 0.8125em;
+      color: var(--psi-gray-500);
     }
   }
 }
