@@ -106,9 +106,47 @@ bin/ember-cli
 
 The site will be available at **http://localhost:4200** (proxied through ember-cli) or **http://localhost:3000** (Rails direct).
 
+## Step 5b: Logging in during development
+
+Discourse normally requires email confirmation to log in. For local development,
+skip this entirely using the **impersonation endpoint**.
+
+**Prerequisite**: You must start Rails with this env var (already shown above):
+```bash
+DISCOURSE_DEV_ALLOW_ANON_TO_IMPERSONATE=1 bin/rails s
+```
+
+**To log in**: Visit this URL in your browser (replace `<port>` with your ember-cli port,
+e.g., 4200):
+```
+http://localhost:<port>/session/admin/become
+```
+
+This instantly logs you in as the `admin` user — no password or email needed.
+
+**Other users you can impersonate** (if you've run the seed script):
+- `http://localhost:<port>/session/testuser/become`
+- `http://localhost:<port>/session/francesca/become`
+- `http://localhost:<port>/session/michael_h/become`
+- `http://localhost:<port>/session/sofia_f/become`
+
+**If you want actual email-based login** (e.g., for testing the signup flow):
+```bash
+# Option 1: Skip email confirmation entirely
+bin/rails runner "SiteSetting.skip_email_confirmation = true"
+
+# Option 2: Use MailHog for local email capture
+brew install mailhog
+mailhog  # Runs SMTP on localhost:1025, web UI on localhost:8025
+# Then set SMTP host to localhost, port 1025 in Discourse admin settings
+```
+
+**For production email** (DigitalOcean deployment): You'll need a transactional email
+service. Cheapest options: Mailgun (free tier: 100 emails/day), SendGrid, or Postmark.
+
 ## Step 6: Initial Discourse setup
 
-1. Visit http://localhost:4200
+1. Visit http://localhost:4200 (or whatever port ember-cli shows)
 2. You'll see the Discourse setup wizard on first run
 3. Create your admin account
 4. Complete the wizard
