@@ -11,3 +11,14 @@
 .psi-vote-results__bar {
   width: 20px;
 }
+
+// Hide floating topic admin icons on mobile
+.topic-admin-menu-button-container,
+.topic-admin-popup-menu {
+  display: none !important;
+}
+
+// Hide the mobile floating sidebar icons
+.sidebar-footer-wrapper {
+  display: none !important;
+}

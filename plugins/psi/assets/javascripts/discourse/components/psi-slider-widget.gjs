@@ -141,7 +141,6 @@ export default class PsiSliderWidget extends Component {
           <PsiDiscreteSlider
             @selectedPosition={{this.selectedPosition}}
             @onSelect={{this.onSliderSelect}}
-            @avatarUrl={{this.avatarUrl}}
           />
 
           {{#if this.selectedPosition}}

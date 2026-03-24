@@ -14,7 +14,7 @@ You need these installed on your Mac:
 
 ```bash
 # Install via Homebrew if you don't have them
-brew install rbenv ruby-build postgresql@15 redis node pnpm
+brew install rbenv ruby-build postgresql@15 redis node pnpm imagemagick
 
 # Start Postgres and Redis
 brew services start postgresql@15
@@ -25,11 +25,21 @@ brew services start redis
 
 ```bash
 # Install Ruby 3.4 (check Gemfile for exact version if needed)
-rbenv install 3.4.1
-rbenv local 3.4.1
+rbenv install 3.4.9
+rbenv local 3.4.9
+
+# IMPORTANT: Add rbenv to your shell. Add this to ~/.zshrc:
+#   eval "$(rbenv init - zsh)"
+# Then restart your terminal or run:
+eval "$(rbenv init - zsh)"
+
+# Also add PostgreSQL to your PATH. Add to ~/.zshrc:
+#   export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 
 # Verify
-ruby --version
+ruby --version   # Should say 3.4.x
+psql --version   # Should say 15.x
 ```
 
 ## Step 3: Install dependencies
@@ -44,6 +54,11 @@ bundle install
 pnpm install
 ```
 
+**Troubleshooting:** If you get "You must use Bundler 2 or greater with this lockfile",
+make sure you're using the rbenv Ruby (not the system Ruby). Run `which ruby` — it should
+point to `~/.rbenv/versions/3.4.x/bin/ruby`, not `/usr/bin/ruby`. If not, run
+`eval "$(rbenv init - zsh)"` and try again.
+
 ## Step 4: Set up the database
 
 ```bash
@@ -57,13 +72,31 @@ bin/rails db:create db:migrate
 bin/rails db:seed
 ```
 
+## Step 4b: Compile plugin JavaScript
+
+Modern Discourse compiles plugin JS via a rollup-based compiler on the Rails side.
+When using `bin/rails s` (not the full pitchfork server), you need to trigger this manually:
+
+```bash
+bin/rails runner "Discourse.plugins.each { |p| Plugin::JsManager.new.send(:compile_js_bundle, p) }"
+```
+
+This creates compiled JS bundles in `app/assets/generated/psi/`. You only need to re-run
+this when you change the plugin's JavaScript files.
+
+**Note:** The `discourse-ai` plugin requires the `pgvector` PostgreSQL extension. If you
+see errors about pgvector during migration, you can either install it (`brew install pgvector`)
+or temporarily rename the plugin directory to disable it.
+
 ## Step 5: Start the dev server
 
 You need two terminals:
 
 **Terminal 1 — Rails backend:**
 ```bash
-bin/rails s
+# The DISCOURSE_DEV_ALLOW_ANON_TO_IMPERSONATE=1 env var lets you
+# switch users easily via /session/<username>/become
+DISCOURSE_DEV_ALLOW_ANON_TO_IMPERSONATE=1 bin/rails s
 ```
 
 **Terminal 2 — Ember frontend:**

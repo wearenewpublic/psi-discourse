@@ -30,7 +30,7 @@ body {
   font-family: var(--font-family);
 }
 
-// Topic title
+// Topic title — large, medium weight like Figma
 #topic-title .fancy-title {
   font-family: var(--heading-font-family);
   font-weight: 500;
@@ -38,32 +38,154 @@ body {
   line-height: 1.25;
 }
 
-// ---- Topic Page Layout ----
-.topic-body {
-  .contents {
-    border-bottom: 1px solid var(--psi-gray-200);
-    padding-bottom: 0.75em;
-  }
+// ======================================================
+// HIDE DISCOURSE UI NOT IN PSI FIGMA DESIGNS
+// ======================================================
+
+// Hide the left sidebar navigation
+.sidebar-wrapper,
+#d-sidebar,
+.sidebar-container {
+  display: none !important;
 }
 
-// ---- Post Styling ----
+// Make body full-width without sidebar
+.has-sidebar-page #main-outlet-wrapper {
+  grid-template-columns: 1fr !important;
+}
+
+// Hide "this is the first time X has posted" small action posts
+.topic-post.small-action {
+  display: none !important;
+}
+
+// Hide "first time posted" notice banners inside posts
+.post-notice.new-user {
+  display: none !important;
+}
+
+// Hide the topic map / summary box
+.topic-map {
+  display: none !important;
+}
+
+// Hide timeline / progress bar on the right
+.topic-navigation .timeline-container,
+#topic-progress-wrapper {
+  display: none !important;
+}
+
+// Hide post number and date on the far right of posts
+.topic-post .post-info.post-date,
+.topic-post .post-info.topic-link {
+  display: none !important;
+}
+
+// Hide the "views" count, "copy link" etc. from post meta
+.post-info.likes,
+.post-info.reads {
+  display: none !important;
+}
+
+// Hide the topic footer buttons (Share, Bookmark, Reply at bottom)
+.topic-footer-buttons {
+  display: none !important;
+}
+
+// Hide the "New & Unread Topics" / suggested topics at the bottom
+#suggested-topics {
+  display: none !important;
+}
+
+// Hide the "Watching" notification level selector
+.topic-notifications-button {
+  display: none !important;
+}
+
+// ======================================================
+// POST STYLING — Match Figma layout
+// ======================================================
+//
+// Figma layout per post:
+//   [Avatar 40px]  Name (bold)
+//                  time ago
+//                  [Stance Badge]
+//
+//   Post body text
+//
+//   Reply  React          ❤️ + 💬 🔥 100
+//   ─────────────────────────────────────
+
 .topic-post {
+  // Remove default Discourse post borders/gaps
   .boxed {
     border-bottom: 1px solid var(--psi-gray-200);
   }
 
-  // Author info
+  // Post avatar — 40px round, on the left
+  .topic-avatar {
+    padding-right: 12px;
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  // ---- Author byline ----
+  // Figma: Name (bold) on first line, time below
   .topic-meta-data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
     .names {
-      font-weight: 500;
+      font-weight: 600;
+      font-size: 0.9375em;
+      color: var(--psi-dark);
+      order: 1;
+
+      // Show the display name prominently
+      .first {
+        font-weight: 600;
+        a {
+          color: var(--psi-dark);
+        }
+      }
+
+      // Hide the second (username) line if display name is shown
+      .second {
+        display: none;
+      }
+    }
+
+    // Move the relative date below the name
+    .post-infos {
+      order: 2;
+      margin-top: 2px;
+
+      .relative-date {
+        font-size: 0.8125em;
+        color: var(--psi-gray-500);
+      }
+    }
+  }
+
+  // ---- Post actions row ----
+  // Figma shows: Reply  React     [reactions on right]
+  .post-menu-area {
+    .actions {
+      display: flex;
+      gap: 8px;
     }
   }
 }
 
 // ---- PSI Stance Badge ----
+// Shown below the author name as a small pill
 .psi-stance-badge {
   display: inline-block;
-  padding: 2px 10px;
+  padding: 3px 10px;
   border-radius: 4px;
   font-size: 0.8125em;
   font-weight: 500;
@@ -71,6 +193,7 @@ body {
   background-color: var(--psi-gray-100);
   color: var(--psi-dark);
   margin-top: 4px;
+  margin-bottom: 4px;
 }
 
 // ---- Editorial Badge / Group Flair ----
@@ -83,38 +206,7 @@ body {
   line-height: 1.25;
 }
 
-// ---- Banner ----
-.psi-banner {
-  background-color: var(--psi-salmon-light);
-  border-bottom: 1px solid var(--psi-salmon);
-  padding: 10px 16px;
-  font-size: 0.875em;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  &__text {
-    color: var(--psi-dark);
-
-    a {
-      color: var(--psi-dark);
-      font-weight: 600;
-      text-decoration: underline;
-    }
-  }
-
-  &__dismiss {
-    cursor: pointer;
-    color: var(--psi-gray-500);
-    background: none;
-    border: none;
-    font-size: 1em;
-    padding: 0 4px;
-  }
-}
-
 // ---- Header Simplification ----
-// Make the Discourse header cleaner for PSI
 .d-header {
   box-shadow: none;
   border-bottom: 1px solid var(--psi-gray-200);
@@ -133,4 +225,10 @@ a {
   &:hover {
     background-color: darken(#5a1ef5, 10%);
   }
+}
+
+// ---- Sort Row (above posts) ----
+// Figma shows "Most relevant v" dropdown
+.topic-above-post-stream-outlet {
+  padding: 0 12px;
 }
